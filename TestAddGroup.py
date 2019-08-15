@@ -9,37 +9,28 @@ class TestAddGroup(unittest.TestCase):
     def setUp(self):
         self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
-    
-    def test_add_group(self):
-        wd = self.wd
-        self.open_home_page(wd)
-        self.login(wd)
-        self.open_groups_page(wd)
-        self.create_group(wd)
-        self.open_groups_page(wd)
-        self.logout(wd)
 
     def logout(self, wd):
         wd.find_element_by_link_text("Logout").click()
 
-    def create_group(self, wd):
+    def create_group(self, wd, name, header, footer):
         wd.find_element_by_name("new").click()
         wd.find_element_by_name("group_name").clear()
-        wd.find_element_by_name("group_name").send_keys("test")
+        wd.find_element_by_name("group_name").send_keys(name)
         wd.find_element_by_name("group_header").clear()
-        wd.find_element_by_name("group_header").send_keys("test test")
+        wd.find_element_by_name("group_header").send_keys(header)
         wd.find_element_by_name("group_footer").clear()
-        wd.find_element_by_name("group_footer").send_keys("test test")
+        wd.find_element_by_name("group_footer").send_keys(footer)
         wd.find_element_by_name("submit").click()
 
     def open_groups_page(self, wd):
         wd.find_element_by_link_text("groups").click()
 
-    def login(self, wd):
+    def login(self, wd, username, password):
         wd.find_element_by_name("user").clear()
-        wd.find_element_by_name("user").send_keys("admin")
+        wd.find_element_by_name("user").send_keys(username)
         wd.find_element_by_name("pass").clear()
-        wd.find_element_by_name("pass").send_keys("secret")
+        wd.find_element_by_name("pass").send_keys(password)
         wd.find_element_by_xpath("//input[@value='Login']").click()
 
     def open_home_page(self, wd):
@@ -54,7 +45,25 @@ class TestAddGroup(unittest.TestCase):
         try: self.wd.switch_to_alert()
         except NoAlertPresentException as e: return False
         return True
-    
+
+    def test_add_group(self):
+        wd = self.wd
+        self.open_home_page(wd)
+        self.login(wd, username="admin", password="secret")
+        self.open_groups_page(wd)
+        self.create_group(wd, name="test", header="test test", footer="test teest")
+        self.open_groups_page(wd)
+        self.logout(wd)
+
+    def test_add_empty_group(self):
+        wd = self.wd
+        self.open_home_page(wd)
+        self.login(wd, username="admin", password="secret")
+        self.open_groups_page(wd)
+        self.create_group(wd, name="", header="", footer="")
+        self.open_groups_page(wd)
+        self.logout(wd)
+
     def tearDown(self):
         self.wd.quit()
 
