@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 import unittest
+from contact import Contact
 from date import Date
 from log import Log
 
@@ -23,35 +24,30 @@ class TestAddContact(unittest.TestCase):
         log.logout()
 
     def create_contact(self, wd):
-        wd.find_element_by_name("firstname").send_keys("test")
-        wd.find_element_by_name("middlename").send_keys("test")
-        wd.find_element_by_name("lastname").send_keys("test")
+        contact = Contact(0, "fname", "mname", "lname", "nname", "title", "company", "address")
+        contact.add_emails("email1@mail.test", "email2@mail.test", "email3@mail.test")
+        contact.add_phone_numbers("00000000", "00000000", "00000000", "00000000")
+        self.enter_contact_info(wd, contact)
+        wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
 
-        wd.find_element_by_name("nickname").send_keys("test001")
-        wd.find_element_by_name("title").send_keys("title test")
-        wd.find_element_by_name("company").send_keys("company test")
-        wd.find_element_by_name("address").send_keys("address test")
-
-        wd.find_element_by_name("home").send_keys("00000000")
-        wd.find_element_by_name("mobile").send_keys("00000000")
-        wd.find_element_by_name("work").send_keys("00000000")
-        wd.find_element_by_name("fax").send_keys("00000000")
-
-        wd.find_element_by_name("email").send_keys("test1@email.net")
-        wd.find_element_by_name("email2").send_keys("test2@email.net")
-        wd.find_element_by_name("email3").send_keys("test3@email.net")
-
-        wd.find_element_by_name("homepage").send_keys("homepage_test.net")
-
+    def enter_contact_info(self, wd, contact):
+        wd.find_element_by_name("firstname").send_keys(contact.fname)
+        wd.find_element_by_name("middlename").send_keys(contact.mname)
+        wd.find_element_by_name("lastname").send_keys(contact.lname)
+        wd.find_element_by_name("nickname").send_keys(contact.nname)
+        wd.find_element_by_name("title").send_keys(contact.title)
+        wd.find_element_by_name("company").send_keys(contact.company)
+        wd.find_element_by_name("address").send_keys(contact.address)
+        wd.find_element_by_name("home").send_keys(contact.home)
+        wd.find_element_by_name("mobile").send_keys(contact.mobile)
+        wd.find_element_by_name("work").send_keys(contact.work)
+        wd.find_element_by_name("fax").send_keys(contact.fax)
+        wd.find_element_by_name("email").send_keys(contact.email1)
+        wd.find_element_by_name("email2").send_keys(contact.email2)
+        wd.find_element_by_name("email3").send_keys(contact.email3)
         self.enter_date(wd, Date(day_str="29", month_str="June", year_str="1995"), "bday", "bmonth", "byear")
         self.enter_date(wd, Date(day_str="1", month_str="January", year_str="2000"), "aday", "amonth", "ayear")
-
-        Select(wd.find_element_by_name("new_group")).select_by_index(0)
-        wd.find_element_by_name("address2").send_keys("address test")
-        wd.find_element_by_name("phone2").send_keys("00000000")
-        wd.find_element_by_name("notes").send_keys("notes test")
-
-        wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
+        Select(wd.find_element_by_name("new_group")).select_by_index(contact.group)
 
     def open_add_contact_page(self, wd):
         wd.find_element_by_link_text("add new").click()
