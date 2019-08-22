@@ -24,9 +24,9 @@ class TestAddContact(unittest.TestCase):
         log.logout()
 
     def create_contact(self, wd):
-        contact = Contact(0, "fname", "mname", "lname", "nname", "title", "company", "address")
-        contact.add_emails("email1@mail.test", "email2@mail.test", "email3@mail.test")
-        contact.add_phone_numbers("00000000", "00000000", "00000000", "00000000")
+        contact = Contact(1, "fname", "mname", "lname", "nname", "title", "company", "address")
+        #contact.add_emails("email1@mail.test", "email2@mail.test", "email3@mail.test")
+        #contact.add_phone_numbers("00000000", "00000000", "00000000", "00000000")
         self.enter_contact_info(wd, contact)
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
 
