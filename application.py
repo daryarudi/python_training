@@ -44,8 +44,6 @@ class Application:
     def create_contact(self, contact):
         wd = self.wd
         self.open_add_contact_page()
-        contact.add_emails("email1@mail.test", "email2@mail.test", "email3@mail.test")
-        # contact.add_phone_numbers("00000000", "00000000", "00000000", "00000000")
         self.enter_contact_info(contact)
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
 
@@ -57,14 +55,6 @@ class Application:
         wd.find_element_by_name("nickname").send_keys(contact.nname)
         wd.find_element_by_name("title").send_keys(contact.title)
         wd.find_element_by_name("company").send_keys(contact.company)
-        wd.find_element_by_name("address").send_keys(contact.address)
-        wd.find_element_by_name("home").send_keys(contact.home)
-        wd.find_element_by_name("mobile").send_keys(contact.mobile)
-        wd.find_element_by_name("work").send_keys(contact.work)
-        wd.find_element_by_name("fax").send_keys(contact.fax)
-        wd.find_element_by_name("email").send_keys(contact.email1)
-        wd.find_element_by_name("email2").send_keys(contact.email2)
-        wd.find_element_by_name("email3").send_keys(contact.email3)
         Select(wd.find_element_by_name("new_group")).select_by_index(contact.group)
 
     def open_add_contact_page(self):
