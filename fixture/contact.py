@@ -21,20 +21,19 @@ class ContactHelper:
         wd.find_element_by_name("update").click()
         self.open_contact_page()
 
-    def enter_contact_info(self, contact):
+    def change_field_value(self, field_name, text):
         wd = self.app.wd
-        wd.find_element_by_name("firstname").clear()
-        wd.find_element_by_name("firstname").send_keys(contact.fname)
-        wd.find_element_by_name("middlename").clear()
-        wd.find_element_by_name("middlename").send_keys(contact.mname)
-        wd.find_element_by_name("lastname").clear()
-        wd.find_element_by_name("lastname").send_keys(contact.lname)
-        wd.find_element_by_name("nickname").clear()
-        wd.find_element_by_name("nickname").send_keys(contact.nname)
-        wd.find_element_by_name("title").clear()
-        wd.find_element_by_name("title").send_keys(contact.title)
-        wd.find_element_by_name("company").clear()
-        wd.find_element_by_name("company").send_keys(contact.company)
+        if text is not None:
+            wd.find_element_by_name(field_name).clear()
+            wd.find_element_by_name(field_name).send_keys(text)
+
+    def enter_contact_info(self, contact):
+        self.change_field_value("firstname", contact.fname)
+        self.change_field_value("middlename", contact.mname)
+        self.change_field_value("lastname", contact.lname)
+        self.change_field_value("nickname", contact.nname)
+        self.change_field_value("title", contact.title)
+        self.change_field_value("company", contact.company)
 
     def delete_first_contact(self):
         wd = self.app.wd
