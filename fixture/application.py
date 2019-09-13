@@ -13,6 +13,13 @@ class Application:
         self.contact = ContactHelper(self)
         self.session = SessionHelper(self)
 
+    def is_valid(self):
+        try:
+            self.wd.current_url
+            return True
+        except:
+            return False
+
     def destroy(self):
         wd = self.wd
         wd.quit()
