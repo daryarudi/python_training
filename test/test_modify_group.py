@@ -15,6 +15,7 @@ def test_modify_group_name(app):
     assert sorted(old_groups, key=Group.id_or_max) == sorted(new_groups, key=Group.id_or_max)
 
 
+# не доработан
 def test_modify_group_header(app):
     if app.group.count() == 0:
         app.group.create(Group(name="group"))

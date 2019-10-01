@@ -1,4 +1,5 @@
 from selenium.webdriver.support.ui import Select
+from model.contact import Contact
 
 
 class ContactHelper:
@@ -47,6 +48,7 @@ class ContactHelper:
         wd.find_element_by_xpath("(//input[@value='Delete'])").click()
         wd.switch_to_alert().accept()
         self.open_contact_page()
+        wd.find_element_by_css_selector("div.msgbox")
 
     def open_contact_page(self):
         wd = self.app.wd
@@ -57,3 +59,15 @@ class ContactHelper:
         wd = self.app.wd
         if not (wd.current_url.endswith("/edit.php") and len(wd.find_elements_by_xpath("(//input[@name='submit'])[2]")) > 0):
             wd.find_element_by_link_text("add new").click()
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.open_contact_page()
+        groups = []
+        for el in wd.find_elements_by_name("entry"):
+            tds = el.find_elements_by_tag_name("td")
+            lname = tds[1].text
+            fname = tds[2].text
+            id = tds[0].find_element_by_tag_name("input").get_attribute("value")
+            groups.append(Contact(fname=fname, lname=lname, id=id))
+        return groups
