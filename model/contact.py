@@ -3,14 +3,14 @@ from sys import maxsize
 
 class Contact:
 
-    def __init__(self, fname=None, mname=None, lname=None, nname=None, title=None, company=None, address=None, id=None):
+    def __init__(self, fname=None, mname=None, lname=None, hphone=None, mphone=None, wphone=None, fax=None, id=None):
         self.fname = fname
         self.mname = mname
         self.lname = lname
-        self.nname = nname
-        self.title = title
-        self.company = company
-        self.address = address
+        self.hphone = hphone
+        self.mphone = mphone
+        self.wphone = wphone
+        self.fax = fax
         self.id = id
 
     def __repr__(self):

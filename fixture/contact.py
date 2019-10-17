@@ -21,7 +21,7 @@ class ContactHelper:
         self.contact_cache = None
 
     def modify_first_contact(self, contact):
-        self.modify_contact_by_index(0)
+        self.modify_contact_by_index(0, contact)
 
     def modify_contact_by_index(self, index, contact):
         wd = self.app.wd
@@ -42,9 +42,10 @@ class ContactHelper:
         self.change_field_value("firstname", contact.fname)
         self.change_field_value("middlename", contact.mname)
         self.change_field_value("lastname", contact.lname)
-        self.change_field_value("nickname", contact.nname)
-        self.change_field_value("title", contact.title)
-        self.change_field_value("company", contact.company)
+        self.change_field_value("home", contact.hphone)
+        self.change_field_value("mobile", contact.mphone)
+        self.change_field_value("work", contact.wphone)
+        self.change_field_value("fax", contact.fax)
 
     def delete_first_contact(self):
         self.delete_contact_by_index(0)

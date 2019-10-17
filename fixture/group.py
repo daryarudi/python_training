@@ -32,7 +32,7 @@ class GroupHelper:
             wd.find_element_by_name(field_name).send_keys(text)
 
     def modify_first_group(self, new_group_data):
-        self.modify_group_by_index(0)
+        self.modify_group_by_index(0, new_group_data)
 
     def modify_group_by_index(self, index, new_group_data):
         wd = self.app.wd
