@@ -18,6 +18,7 @@ class ContactHelper:
         self.enter_contact_info(contact)
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
         self.open_add_contact_page()
+        self.contact_cache = None
 
     def modify_first_contact(self, contact):
         wd = self.app.wd
@@ -26,6 +27,7 @@ class ContactHelper:
         self.enter_contact_info(contact)
         wd.find_element_by_name("update").click()
         self.open_contact_page()
+        self.contact_cache = None
 
     def change_field_value(self, field_name, text):
         wd = self.app.wd
@@ -49,6 +51,7 @@ class ContactHelper:
         wd.switch_to_alert().accept()
         self.open_contact_page()
         wd.find_element_by_css_selector("div.msgbox")
+        self.contact_cache = None
 
     def open_contact_page(self):
         wd = self.app.wd
@@ -60,14 +63,17 @@ class ContactHelper:
         if not (wd.current_url.endswith("/edit.php") and len(wd.find_elements_by_xpath("(//input[@name='submit'])[2]")) > 0):
             wd.find_element_by_link_text("add new").click()
 
+    contact_cache = None
+
     def get_contact_list(self):
-        wd = self.app.wd
-        self.open_contact_page()
-        groups = []
-        for el in wd.find_elements_by_name("entry"):
-            tds = el.find_elements_by_tag_name("td")
-            lname = tds[1].text
-            fname = tds[2].text
-            id = tds[0].find_element_by_tag_name("input").get_attribute("value")
-            groups.append(Contact(fname=fname, lname=lname, id=id))
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.open_contact_page()
+            groups = []
+            for el in wd.find_elements_by_name("entry"):
+                tds = el.find_elements_by_tag_name("td")
+                lname = tds[1].text
+                fname = tds[2].text
+                id = tds[0].find_element_by_tag_name("input").get_attribute("value")
+                groups.append(Contact(fname=fname, lname=lname, id=id))
         return groups
