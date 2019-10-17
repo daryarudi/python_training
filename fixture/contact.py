@@ -1,5 +1,6 @@
 from selenium.webdriver.support.ui import Select
 from model.contact import Contact
+import re
 
 
 class ContactHelper:
@@ -92,6 +93,12 @@ class ContactHelper:
                     groups.append(Contact(fname=fname, lname=lname, id=id))
         return groups
 
+    def open_contact_view_by_index(self, index):
+        wd = self.app.wd
+        self.open_contact_page()
+        tds = wd.find_elements_by_name("entry")[index]
+        tds.find_elements_by_tag_name("td")[6].find_element_by_tag_name("a").click()
+
     def get_contact_info_from_edit_page(self, index):
         wd = self.app.wd
         self.open_contact_to_edit_by_index(index)
@@ -102,3 +109,12 @@ class ContactHelper:
         mphone = wd.find_element_by_name("mobile").get_attribute("value")
         wphone = wd.find_element_by_name("work").get_attribute("value")
         return Contact(fname=fname, lname=lname, hphone=hphone, mphone=mphone, wphone=wphone, id=id)
+
+    def get_contact_from_view_page(self, index):
+        wd = self.app.wd
+        self.open_contact_view_by_index(index)
+        text = wd.find_element_by_id("content").text
+        hphone = re.search("H: (.*)", text).group(1)
+        wphone = re.search("W: (.*)", text).group(1)
+        mphone = re.search("M: (.*)", text).group(1)
+        return Contact(hphone=hphone, mphone=mphone, wphone=wphone)
