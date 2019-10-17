@@ -23,10 +23,14 @@ class ContactHelper:
     def modify_first_contact(self, contact):
         self.modify_contact_by_index(0, contact)
 
+    def open_contact_to_edit_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements_by_xpath("(//img[@alt='Edit'])")[index].click()
+
     def modify_contact_by_index(self, index, contact):
         wd = self.app.wd
         self.open_contact_page()
-        wd.find_elements_by_xpath("(//img[@alt='Edit'])")[index].click()
+        self.open_contact_to_edit_by_index(index)
         self.enter_contact_info(contact)
         wd.find_element_by_name("update").click()
         self.open_contact_page()
@@ -40,12 +44,10 @@ class ContactHelper:
 
     def enter_contact_info(self, contact):
         self.change_field_value("firstname", contact.fname)
-        self.change_field_value("middlename", contact.mname)
         self.change_field_value("lastname", contact.lname)
         self.change_field_value("home", contact.hphone)
         self.change_field_value("mobile", contact.mphone)
         self.change_field_value("work", contact.wphone)
-        self.change_field_value("fax", contact.fax)
 
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
@@ -82,5 +84,21 @@ class ContactHelper:
                 lname = tds[1].text
                 fname = tds[2].text
                 id = tds[0].find_element_by_tag_name("input").get_attribute("value")
-                groups.append(Contact(fname=fname, lname=lname, id=id))
+                all_phones = tds[5].text.splitlines()
+                if len(all_phones) >= 3:
+                    groups.append(Contact(fname=fname, lname=lname, hphone=all_phones[0], mphone=all_phones[1],
+                                          wphone=all_phones[2], id=id))
+                else:
+                    groups.append(Contact(fname=fname, lname=lname, id=id))
         return groups
+
+    def get_contact_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.open_contact_to_edit_by_index(index)
+        fname = wd.find_element_by_name("firstname").get_attribute("value")
+        lname = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        hphone = wd.find_element_by_name("home").get_attribute("value")
+        mphone = wd.find_element_by_name("mobile").get_attribute("value")
+        wphone = wd.find_element_by_name("work").get_attribute("value")
+        return Contact(fname=fname, lname=lname, hphone=hphone, mphone=mphone, wphone=wphone, id=id)
