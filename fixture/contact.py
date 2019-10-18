@@ -79,7 +79,7 @@ class ContactHelper:
         if self.contact_cache is None:
             wd = self.app.wd
             self.open_contact_page()
-            groups = []
+            contact_cache = []
             for el in wd.find_elements_by_name("entry"):
                 tds = el.find_elements_by_tag_name("td")
                 lname = tds[1].text
@@ -87,11 +87,11 @@ class ContactHelper:
                 id = tds[0].find_element_by_tag_name("input").get_attribute("value")
                 all_phones = tds[5].text.splitlines()
                 if len(all_phones) >= 3:
-                    groups.append(Contact(fname=fname, lname=lname, hphone=all_phones[0], mphone=all_phones[1],
+                    contact_cache.append(Contact(fname=fname, lname=lname, hphone=all_phones[0], mphone=all_phones[1],
                                           wphone=all_phones[2], id=id))
                 else:
-                    groups.append(Contact(fname=fname, lname=lname, id=id))
-        return groups
+                    contact_cache.append(Contact(fname=fname, lname=lname, id=id))
+        return list(contact_cache)
 
     def open_contact_view_by_index(self, index):
         wd = self.app.wd
